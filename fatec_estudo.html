@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FATEC Study Hub — Euzinha</title>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0b0f1a;
+      --bg2: #111827;
+      --bg3: #1a2235;
+      --card: #141d2e;
+      --border: #1f2d44;
+      --accent: #38bdf8;
+      --accent2: #f472b6;
+      --accent3: #a78bfa;
+      --gold: #fbbf24;
+      --green: #34d399;
+      --red: #f87171;
+      --text: #e2e8f0;
+      --muted: #64748b;
+      --soft: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* Animated background */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 800px 600px at 10% 20%, rgba(56, 189, 248, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 500px at 90% 80%, rgba(167, 139, 250, 0.05) 0%, transparent 60%),
+        radial-gradient(ellipse 400px 300px at 50% 50%, rgba(244, 114, 182, 0.03) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      position: relative;
+      z-index: 1;
+    }
+
+    /* HEADER */
+    header {
+      padding: 40px 0 20px;
+      text-align: center;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 40px;
+    }
+
+    header .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 11px;
+      letter-spacing: 4px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 6vw, 60px);
+      font-weight: 900;
+      background: linear-gradient(135deg, #e2e8f0 0%, #38bdf8 50%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      line-height: 1.1;
+      margin-bottom: 10px;
+    }
+
+    header p {
+      color: var(--soft);
+      font-size: 15px;
+    }
+
+    /* NAV TABS */
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 36px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 0;
+      overflow-x: auto;
+    }
+
+    .tab-btn {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 20px;
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .tab-btn.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-btn:hover:not(.active) {
+      color: var(--text);
+    }
+
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* STUDY PLAN */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .subject-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 20px;
+      position: relative;
+      overflow: hidden;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+
+    .subject-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    .subject-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--subj-color, var(--accent));
+    }
+
+    .subject-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .subject-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 17px;
+      font-weight: 700;
+    }
+
+    .subject-icon {
+      font-size: 22px;
+    }
+
+    .topic-list {
+      list-style: none;
+    }
+
+    .topic-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+      font-size: 13px;
+      color: var(--soft);
+    }
+
+    .topic-item:last-child {
+      border-bottom: none;
+    }
+
+    .check-box {
+      width: 18px;
+      height: 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 4px;
+      cursor: pointer;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      font-size: 11px;
+    }
+
+    .check-box.done {
+      background: var(--green);
+      border-color: var(--green);
+      color: #000;
+    }
+
+    .topic-item.done-text span {
+      text-decoration: line-through;
+      opacity: 0.5;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      margin-top: 14px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      background: var(--green);
+      border-radius: 2px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: var(--muted);
+      margin-top: 5px;
+      font-family: 'DM Mono', monospace;
+    }
+
+    /* STATS BAR */
+    .stats-bar {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-bottom: 28px;
+    }
+
+    .stat-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 32px;
+      font-weight: 900;
+      color: var(--accent);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* QUIZ */
+    .quiz-controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      margin-bottom: 24px;
+    }
+
+    .quiz-controls h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 18px;
+      color: var(--accent);
+    }
+
+    .subject-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .pill {
+      padding: 6px 14px;
+      border-radius: 20px;
+      border: 1.5px solid var(--border);
+      background: none;
+      color: var(--soft);
+      font-size: 12px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .pill.selected {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(56, 189, 248, 0.08);
+    }
+
+    .pill:hover:not(.selected) {
+      border-color: var(--soft);
+      color: var(--text);
+    }
+
+    .difficulty-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 20px;
+      align-items: center;
+    }
+
+    .difficulty-row label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-right: 4px;
+    }
+
+    .diff-btn {
+      padding: 5px 14px;
+      border-radius: 6px;
+      border: 1.5px solid var(--border);
+      background: none;
+      color: var(--soft);
+      font-size: 12px;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.2s;
+    }
+
+    .diff-btn.active-diff {
+      border-color: var(--gold);
+      color: var(--gold);
+      background: rgba(251, 191, 36, 0.08);
+    }
+
+    .gen-btn {
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent3) 100%);
+      color: #000;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .gen-btn:hover {
+      opacity: 0.9;
+      transform: scale(1.02);
+    }
+
+    .gen-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    /* Question card */
+    #quiz-area {
+      margin-top: 24px;
+    }
+
+    .question-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 28px;
+      margin-bottom: 16px;
+      animation: slideIn 0.4s ease;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .q-meta {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .q-tag {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      padding: 3px 10px;
+      border-radius: 12px;
+      background: rgba(56, 189, 248, 0.1);
+      color: var(--accent);
+      border: 1px solid rgba(56, 189, 248, 0.2);
+    }
+
+    .q-diff {
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+
+    .q-diff.facil {
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--green);
+      border: 1px solid rgba(52, 211, 153, 0.2);
+    }
+
+    .q-diff.medio {
+      background: rgba(251, 191, 36, 0.1);
+      color: var(--gold);
+      border: 1px solid rgba(251, 191, 36, 0.2);
+    }
+
+    .q-diff.dificil {
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--red);
+      border: 1px solid rgba(248, 113, 113, 0.2);
+    }
+
+    .q-text {
+      font-size: 16px;
+      line-height: 1.7;
+      margin-bottom: 20px;
+      font-weight: 400;
+    }
+
+    .options-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .option-btn {
+      background: var(--bg3);
+      border: 1.5px solid var(--border);
+      border-radius: 8px;
+      padding: 12px 16px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+    }
+
+    .option-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      background: rgba(56, 189, 248, 0.05);
+    }
+
+    .option-btn.correct {
+      border-color: var(--green);
+      background: rgba(52, 211, 153, 0.1);
+      color: var(--green);
+    }
+
+    .option-btn.wrong {
+      border-color: var(--red);
+      background: rgba(248, 113, 113, 0.1);
+      color: var(--red);
+    }
+
+    .option-btn:disabled {
+      cursor: default;
+    }
+
+    .opt-letter {
+      font-family: 'DM Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: var(--border);
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .explanation-box {
+      background: var(--bg3);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      padding: 14px 18px;
+      margin-top: 16px;
+      font-size: 13px;
+      color: var(--soft);
+      line-height: 1.6;
+      display: none;
+    }
+
+    .explanation-box.show {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .explanation-box strong {
+      color: var(--accent);
+    }
+
+    .next-btn {
+      margin-top: 16px;
+      background: none;
+      border: 1.5px solid var(--accent3);
+      color: var(--accent3);
+      padding: 10px 22px;
+      border-radius: 8px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      cursor: pointer;
+      display: none;
+      transition: all 0.2s;
+    }
+
+    .next-btn:hover {
+      background: rgba(167, 139, 250, 0.1);
+    }
+
+    .next-btn.show {
+      display: inline-block;
+    }
+
+    /* Loading spinner */
+    .spinner {
+      display: none;
+      text-align: center;
+      padding: 40px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .spinner.show {
+      display: block;
+    }
+
+    .spinner-ring {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--border);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 12px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Score display */
+    .score-row {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+      padding: 14px 20px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 16px;
+      font-size: 14px;
+    }
+
+    .score-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .score-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+    }
+
+    .score-num.correct-c {
+      color: var(--green);
+    }
+
+    .score-num.wrong-c {
+      color: var(--red);
+    }
+
+    .score-lbl {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* CRONOGRAMA */
+    .schedule-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .day-col {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .day-header {
+      background: var(--bg3);
+      padding: 8px;
+      text-align: center;
+      font-size: 11px;
+      font-family: 'DM Mono', monospace;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .day-content {
+      padding: 8px;
+    }
+
+    .day-slot {
+      font-size: 11px;
+      color: var(--soft);
+      padding: 4px 6px;
+      border-radius: 4px;
+      margin-bottom: 4px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .slot-bio {
+      background: rgba(52, 211, 153, 0.12);
+      color: var(--green);
+    }
+
+    .slot-fis {
+      background: rgba(56, 189, 248, 0.12);
+      color: var(--accent);
+    }
+
+    .slot-qui {
+      background: rgba(251, 191, 36, 0.12);
+      color: var(--gold);
+    }
+
+    .slot-mat {
+      background: rgba(167, 139, 250, 0.12);
+      color: var(--accent3);
+    }
+
+    .slot-por {
+      background: rgba(244, 114, 182, 0.12);
+      color: var(--accent2);
+    }
+
+    .slot-geo {
+      background: rgba(248, 113, 113, 0.12);
+      color: var(--red);
+    }
+
+    .slot-his {
+      background: rgba(148, 163, 184, 0.12);
+      color: var(--soft);
+    }
+
+    .slot-ing {
+      background: rgba(56, 189, 248, 0.08);
+      color: #7dd3fc;
+    }
+
+    .slot-rev {
+      background: rgba(167, 139, 250, 0.08);
+      color: var(--accent3);
+      font-style: italic;
+    }
+
+    @media (max-width: 600px) {
+      .schedule-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .stats-bar {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .subjects-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Error box */
+    .error-box {
+      background: rgba(248, 113, 113, 0.08);
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      border-radius: 8px;
+      padding: 14px 18px;
+      color: var(--red);
+      font-size: 13px;
+      margin-top: 12px;
+      display: none;
+    }
+
+    .error-box.show {
+      display: block;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <header>
+      <div class="eyebrow">✦ Preparação FATEC ✦</div>
+      <h1>Study Hub</h1>
+      <p>Seu plano de estudos personalizado para o vestibular</p>
+    </header>
+
+    <!-- STATS -->
+    <div class="stats-bar">
+      <div class="stat-card">
+        <div class="stat-num" id="stat-topics">0</div>
+        <div class="stat-label">Tópicos concluídos</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-correct" style="color:var(--green)">0</div>
+        <div class="stat-label">Questões corretas</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-num" id="stat-pct" style="color:var(--accent2)">0%</div>
+        <div class="stat-label">Aproveitamento</div>
+      </div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('plano')">📚 Plano de Estudos</button>
+      <button class="tab-btn" onclick="switchTab('quiz')">🧠 Quiz</button>
+      <button class="tab-btn" onclick="switchTab('cronograma')">📅 Cronograma</button>
+    </div>
+
+    <!-- PLANO DE ESTUDOS -->
+    <div id="tab-plano" class="tab-panel active">
+      <div class="subjects-grid" id="subjects-grid"></div>
+    </div>
+
+    <!-- QUIZ -->
+    <div id="tab-quiz" class="tab-panel">
+      <div class="quiz-controls">
+        <h3>⚡ Gerar Questões com IA</h3>
+        <p style="font-size:13px;color:var(--muted);margin-bottom:14px;">Selecione as matérias e deixe a IA criar
+          questões no estilo FATEC:</p>
+        <div class="subject-pills" id="quiz-pills"></div>
+        <div class="difficulty-row">
+          <label>Dificuldade:</label>
+          <button class="diff-btn active-diff" data-diff="misto" onclick="selectDiff(this)">Misto</button>
+          <button class="diff-btn" data-diff="facil" onclick="selectDiff(this)">Fácil</button>
+          <button class="diff-btn" data-diff="medio" onclick="selectDiff(this)">Médio</button>
+          <button class="diff-btn" data-diff="dificil" onclick="selectDiff(this)">Difícil</button>
+        </div>
+        <button class="gen-btn" id="gen-btn" onclick="generateQuiz()">Gerar 3 Questões →</button>
+        <div class="error-box" id="error-box"></div>
+      </div>
+
+      <div class="score-row" id="score-row" style="display:none">
+        <div class="score-item">
+          <span class="score-num correct-c" id="q-correct">0</span>
+          <span class="score-lbl">Corretas</span>
+        </div>
+        <div class="score-item">
+          <span class="score-num wrong-c" id="q-wrong">0</span>
+          <span class="score-lbl">Erradas</span>
+        </div>
+        <div class="score-item">
+          <span class="score-num" id="q-pct" style="color:var(--accent)">—</span>
+          <span class="score-lbl">Aproveitamento</span>
+        </div>
+      </div>
+
+      <div class="spinner" id="spinner">
+        <div class="spinner-ring"></div>
+        Gerando questões personalizadas…
+      </div>
+
+      <div id="quiz-area"></div>
+    </div>
+
+    <!-- CRONOGRAMA -->
+    <div id="tab-cronograma" class="tab-panel">
+      <div style="margin-bottom:20px">
+        <p style="font-size:14px;color:var(--soft);margin-bottom:6px;">Cronograma semanal sugerido — adapte conforme
+          seus horários disponíveis.</p>
+      </div>
+      <div class="schedule-grid">
+        <div class="day-col">
+          <div class="day-header">SEG</div>
+          <div class="day-content">
+            <div class="day-slot slot-bio">🧬 Bio<br>Sistema ABO</div>
+            <div class="day-slot slot-bio">🌿 Bio<br>Botânica</div>
+            <div class="day-slot slot-fis">⚡ Fís<br>Eletricidade</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">TER</div>
+          <div class="day-content">
+            <div class="day-slot slot-qui">🧪 Quí<br>Estequiometria</div>
+            <div class="day-slot slot-mat">📐 Mat<br>Funções</div>
+            <div class="day-slot slot-por">📝 Port<br>Interpretação</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">QUA</div>
+          <div class="day-content">
+            <div class="day-slot slot-bio">🧬 Bio<br>Genética</div>
+            <div class="day-slot slot-fis">🏎 Fís<br>Mecânica</div>
+            <div class="day-slot slot-geo">🌍 Geo<br>Brasil</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">QUI</div>
+          <div class="day-content">
+            <div class="day-slot slot-mat">📐 Mat<br>Trigon.</div>
+            <div class="day-slot slot-qui">🧪 Quí<br>Org. Geral</div>
+            <div class="day-slot slot-his">📜 His<br>Era Vargas</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">SEX</div>
+          <div class="day-content">
+            <div class="day-slot slot-bio">🦠 Bio<br>Verminoses</div>
+            <div class="day-slot slot-fis">🌊 Fís<br>Ondas/Óptica</div>
+            <div class="day-slot slot-ing">🇺🇸 Ing<br>Textos</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">SÁB</div>
+          <div class="day-content">
+            <div class="day-slot slot-mat">📐 Mat<br>Geometria</div>
+            <div class="day-slot slot-geo">🌍 Geo<br>Ambiente</div>
+            <div class="day-slot slot-his">📜 His<br>Guerra Fria</div>
+          </div>
+        </div>
+        <div class="day-col">
+          <div class="day-header">DOM</div>
+          <div class="day-content">
+            <div class="day-slot slot-rev">🔄 Rev<br>Geral</div>
+            <div class="day-slot slot-rev">🧠 Quiz<br>IA</div>
+            <div class="day-slot slot-rev">📊 Análise<br>Erros</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dicas -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px;margin-top:8px">
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px">
+          <div style="font-size:18px;margin-bottom:8px">💡</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--accent)">Técnica Pomodoro</div>
+          <div style="font-size:12px;color:var(--soft);line-height:1.6">25 min de estudo focado + 5 min de pausa. A cada
+            4 ciclos, faça uma pausa maior de 20 min.</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px">
+          <div style="font-size:18px;margin-bottom:8px">📖</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--accent2)">Revisão Espaçada</div>
+          <div style="font-size:12px;color:var(--soft);line-height:1.6">Revise o conteúdo em 1 dia, 3 dias, 7 dias e 14
+            dias após aprender. Marque no calendário!</div>
+        </div>
+        <div style="background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px">
+          <div style="font-size:18px;margin-bottom:8px">🎯</div>
+          <div style="font-size:13px;font-weight:600;margin-bottom:6px;color:var(--green)">Foco FATEC</div>
+          <div style="font-size:12px;color:var(--soft);line-height:1.6">Priorize Biologia e Física (mais questões na
+            prova). Use o Quiz da IA todo domingo para fechar a semana.</div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /container -->
+
+  <script>
+    // =================== DATA ===================
+    const subjects = [
+      {
+        id: 'bio', name: 'Biologia', icon: '🧬', color: '#34d399',
+        topics: [
+          'Tipo sanguíneo / Sistema ABO',
+          'Botânica / Fotossíntese e Respiração',
+          'Genética / Heredograma',
+          'Verminoses e Parasitologia',
+          'Zoologia / Artrópodes e Animais Peçonhentos',
+          'Biotecnologia / DNA Recombinante',
+          'Ecologia e meio ambiente',
+          'Citologia (organelas, mitose, meiose)',
+        ]
+      },
+      {
+        id: 'fis', name: 'Física', icon: '⚡', color: '#38bdf8',
+        topics: [
+          'Eletricidade: Potência, corrente e DDP',
+          'Mecânica: Atrito e Hidroplanagem',
+          'Óptica / Ondas: Reflexão de luz',
+          'Ondulatória: Frequência e ordem de grandeza',
+          'Mecânica / Cinemática: Trajetória parabólica',
+          'Termodinâmica básica',
+        ]
+      },
+      {
+        id: 'qui', name: 'Química', icon: '🧪', color: '#fbbf24',
+        topics: [
+          'Estequiometria',
+          'Soluções (concentração, diluição)',
+          'Química Orgânica (funções, reações)',
+          'Transformações da matéria',
+          'Ácidos, bases e pH',
+        ]
+      },
+      {
+        id: 'mat', name: 'Matemática', icon: '📐', color: '#a78bfa',
+        topics: [
+          'Funções (1º e 2º grau)',
+          'Trigonometria',
+          'Geometria plana e espacial',
+          'Raciocínio lógico',
+          'Probabilidade e estatística',
+        ]
+      },
+      {
+        id: 'por', name: 'Português', icon: '📝', color: '#f472b6',
+        topics: [
+          'Interpretação de textos',
+          'Gramática aplicada',
+          'Literatura brasileira',
+          'Coesão e coerência textual',
+        ]
+      },
+      {
+        id: 'geo', name: 'Geografia', icon: '🌍', color: '#f87171',
+        topics: [
+          'Geografia do Brasil',
+          'Questões ambientais',
+          'Urbanização',
+          'Climatologia',
+        ]
+      },
+      {
+        id: 'his', name: 'História', icon: '📜', color: '#94a3b8',
+        topics: [
+          'Era Vargas',
+          'Ditadura Militar',
+          'Revolução Industrial',
+          'Guerra Fria e conflitos mundiais',
+        ]
+      },
+      {
+        id: 'ing', name: 'Inglês', icon: '🇺🇸', color: '#7dd3fc',
+        topics: [
+          'Interpretação de textos e tirinhas',
+          'Vocabulário contextual',
+          'Verbos modais',
+        ]
+      },
+    ];
+
+    // =================== STATE ===================
+    let checkedTopics = JSON.parse(localStorage.getItem('fatec_checked') || '{}');
+    let quizScore = JSON.parse(localStorage.getItem('fatec_score') || '{"correct":0,"wrong":0,"total":0}');
+    let selectedSubjects = new Set();
+    let selectedDiff = 'misto';
+    let currentQuestions = [];
+    let currentQIdx = 0;
+
+    // =================== RENDER SUBJECTS ===================
+    function renderSubjects() {
+      const grid = document.getElementById('subjects-grid');
+      grid.innerHTML = '';
+      subjects.forEach(s => {
+        const done = s.topics.filter(t => checkedTopics[s.id + '_' + t]).length;
+        const pct = Math.round(done / s.topics.length * 100);
+
+        const card = document.createElement('div');
+        card.className = 'subject-card';
+        card.style.setProperty('--subj-color', s.color);
+
+        let topicsHtml = s.topics.map(t => {
+          const key = s.id + '_' + t;
+          const isDone = !!checkedTopics[key];
+          return `<li class="topic-item ${isDone ? 'done-text' : ''}" data-key="${key}">
+        <div class="check-box ${isDone ? 'done' : ''}" onclick="toggleTopic('${key}', this)">
+          ${isDone ? '✓' : ''}
+        </div>
+        <span>${t}</span>
+      </li>`;
+        }).join('');
+
+        card.innerHTML = `
+      <div class="subject-header">
+        <span class="subject-name" style="color:${s.color}">${s.name}</span>
+        <span class="subject-icon">${s.icon}</span>
+      </div>
+      <ul class="topic-list">${topicsHtml}</ul>
+      <div class="progress-bar"><div class="progress-fill" style="width:${pct}%;background:${s.color}"></div></div>
+      <div class="progress-label">${done}/${s.topics.length} tópicos · ${pct}%</div>
+    `;
+        grid.appendChild(card);
+      });
+      updateStats();
+    }
+
+    function toggleTopic(key, el) {
+      checkedTopics[key] = !checkedTopics[key];
+      localStorage.setItem('fatec_checked', JSON.stringify(checkedTopics));
+      renderSubjects();
+    }
+
+    function updateStats() {
+      const total = subjects.reduce((a, s) => a + s.topics.length, 0);
+      const done = Object.values(checkedTopics).filter(Boolean).length;
+      document.getElementById('stat-topics').textContent = done;
+
+      const correct = quizScore.correct;
+      const qtotal = quizScore.total;
+      document.getElementById('stat-correct').textContent = correct;
+      document.getElementById('stat-pct').textContent = qtotal > 0 ? Math.round(correct / qtotal * 100) + '%' : '0%';
+    }
+
+    // =================== QUIZ PILLS ===================
+    function renderPills() {
+      const cont = document.getElementById('quiz-pills');
+      cont.innerHTML = '';
+      subjects.forEach(s => {
+        const btn = document.createElement('button');
+        btn.className = 'pill';
+        btn.textContent = s.icon + ' ' + s.name;
+        btn.dataset.id = s.id;
+        btn.onclick = () => {
+          if (selectedSubjects.has(s.id)) selectedSubjects.delete(s.id);
+          else selectedSubjects.add(s.id);
+          btn.classList.toggle('selected', selectedSubjects.has(s.id));
+        };
+        cont.appendChild(btn);
+      });
+    }
+
+    function selectDiff(btn) {
+      document.querySelectorAll('.diff-btn').forEach(b => b.classList.remove('active-diff'));
+      btn.classList.add('active-diff');
+      selectedDiff = btn.dataset.diff;
+    }
+
+    // =================== GENERATE QUIZ ===================
+
+
+
+
+
+
+    async function generateQuiz() {
+      const area = document.getElementById('quiz-area');
+      const spinner = document.getElementById('spinner');
+
+      if (selectedSubjects.size === 0) {
+        alert("Escolha pelo menos uma matéria, porra! 😂");
+        return;
+      }
+
+      area.innerHTML = '';
+      spinner.classList.add('show');
+
+      try {
+        const response = await fetch('http://localhost:3000/generate-quiz', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ materias: Array.from(selectedSubjects) })
+        });
+
+        currentQuestions = await response.json();
+        spinner.classList.remove('show');
+        renderQuestion(0);
+
+      } catch (error) {
+        spinner.classList.remove('show');
+        area.innerHTML = "<p style='color:red'>Erro ao conectar com a IA. O servidor tá ligado?</p>";
+      }
+
+
+
+
+    }
+
+
+
+
+
+
+
+
+
+    function renderQuestion(idx) {
+      const area = document.getElementById('quiz-area');
+      if (idx >= currentQuestions.length) {
+        area.innerHTML = `<div class="question-card" style="text-align:center;padding:40px">
+      <div style="font-size:48px;margin-bottom:16px">🎉</div>
+      <div style="font-family:'Playfair Display',serif;font-size:24px;margin-bottom:10px">Rodada concluída!</div>
+      <div style="color:var(--soft);font-size:14px">Clique em "Gerar 3 Questões" para uma nova rodada.</div>
+    </div>`;
+        return;
+      }
+
+      const q = currentQuestions[idx];
+      const card = document.createElement('div');
+      card.className = 'question-card';
+      card.id = 'qcard-' + idx;
+
+      const diffClass = q.dificuldade === 'fácil' ? 'facil' : q.dificuldade === 'médio' ? 'medio' : 'dificil';
+
+      card.innerHTML = `
+    <div class="q-meta">
+      <span class="q-tag">${q.materia}</span>
+      <span class="q-tag" style="background:rgba(167,139,250,0.1);color:var(--accent3);border-color:rgba(167,139,250,0.2)">${q.topico}</span>
+      <span class="q-diff ${diffClass}">${q.dificuldade}</span>
+      <span style="margin-left:auto;font-size:12px;color:var(--muted);font-family:'DM Mono',monospace">${idx + 1}/${currentQuestions.length}</span>
+    </div>
+    <div class="q-text">${q.enunciado}</div>
+    <ul class="options-list">
+      ${q.opcoes.map((op, i) => `
+        <li>
+          <button class="option-btn" data-idx="${i}" onclick="selectAnswer(${idx}, ${i}, this)">
+            <span class="opt-letter">${['A', 'B', 'C', 'D'][i]}</span>
+            <span>${op.replace(/^[A-D]\)\s*/, '')}</span>
+          </button>
+        </li>
+      `).join('')}
+    </ul>
+    <div class="explanation-box" id="exp-${idx}">
+      <strong>💡 Explicação:</strong> ${q.explicacao}
+    </div>
+    <button class="next-btn" id="next-${idx}" onclick="nextQuestion(${idx})">
+      ${idx < currentQuestions.length - 1 ? 'Próxima questão →' : 'Ver resultado →'}
+    </button>
+  `;
+
+      area.innerHTML = '';
+      area.appendChild(card);
+    }
+
+    function selectAnswer(qIdx, ansIdx, btn) {
+      const q = currentQuestions[qIdx];
+      const allBtns = btn.closest('ul').querySelectorAll('.option-btn');
+      allBtns.forEach(b => b.disabled = true);
+
+      const isCorrect = ansIdx === q.correta;
+      btn.classList.add(isCorrect ? 'correct' : 'wrong');
+      allBtns[q.correta].classList.add('correct');
+
+      if (isCorrect) quizScore.correct++;
+      else quizScore.wrong++;
+      quizScore.total++;
+      localStorage.setItem('fatec_score', JSON.stringify(quizScore));
+
+      document.getElementById('q-correct').textContent = quizScore.correct;
+      document.getElementById('q-wrong').textContent = quizScore.wrong;
+      document.getElementById('q-pct').textContent = Math.round(quizScore.correct / quizScore.total * 100) + '%';
+      updateStats();
+
+      document.getElementById('exp-' + qIdx).classList.add('show');
+      document.getElementById('next-' + qIdx).classList.add('show');
+    }
+
+    function nextQuestion(qIdx) {
+      renderQuestion(qIdx + 1);
+    }
+
+    // =================== TABS ===================
+    function switchTab(id) {
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('tab-' + id).classList.add('active');
+      event.target.classList.add('active');
+    }
+
+    // =================== INIT ===================
+    renderSubjects();
+    renderPills();
+  </script>
+</body>
+
+</html>
